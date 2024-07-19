@@ -1,0 +1,11 @@
+{
+    "git.autofetch": true,
+    "gitdoc.enabled": false,
+    "gitdoc.autoCommitDelay": 60000,
+    "gitdoc.autoPushDelay": 0,
+    "gitdoc.commitMessageFormat": "ccc, LLL d, y, h:mm a '+00:00'",
+    "flake8.args": [
+        "--max-line-length=100",
+    ],
+    "files.insertFinalNewline": true
+}

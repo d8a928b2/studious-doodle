@@ -1,0 +1,5 @@
+__pycache__
+*.zip
+Lesson*Examples
+.pytest_cache
+.mypy_cache
