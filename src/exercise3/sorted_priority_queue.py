@@ -266,3 +266,16 @@ class SortedPriorityQueue(PriorityQueueBase):  # base class defines _Item
             raise Empty("Priority queue is empty.")
         item = self._data.delete(self._data.first())
         return (item._key, item._value)
+
+
+# Example usage
+if __name__ == "__main__":
+    pq = SortedPriorityQueue()
+    pq.add(5, "A")
+    pq.add(9, "C")
+    pq.add(3, "B")
+    pq.add(7, "D")
+
+    print("Min:", pq.min())  # Should print (3, 'B')
+    print("Remove Min:", pq.remove_min())  # Should remove and print (3, 'B')
+    print("Min:", pq.min())  # Should print (5, 'A')
