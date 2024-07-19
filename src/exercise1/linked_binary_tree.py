@@ -311,3 +311,105 @@ class LinkedBinaryTree(BinaryTree):
             node._right = t2._root
             t2._root = None
             t2._size = 0
+
+    def inorderNext(self, p):
+        node = self._validate(p)
+        # Case 1: If node has a right child, go to the leftmost node in the right subtree
+        if node._right is not None:
+            node = node._right
+            while node._left is not None:
+                node = node._left
+            return self._make_position(node)
+        # Case 2: If no right child, go up to the parent until we are a left child
+        else:
+            while node._parent is not None and node == node._parent._right:
+                node = node._parent
+            return self._make_position(node._parent)
+
+    def postorderNext(self, p):
+        node = self._validate(p)
+        parent = node._parent
+        # Case 1: If node is root, return None
+        if parent is None:
+            return None
+        # Case 2: If node is the left child and parent has a right child,
+        # the next node in postorder is the leftmost node in the parent's right subtree
+        if parent._right is not None and node == parent._left:
+            node = parent._right
+            while node._left is not None or node._right is not None:
+                if node._left is not None:
+                    node = node._left
+                else:
+                    node = node._right
+            return self._make_position(node)
+        # Case 3: Otherwise, the next node is the parent
+        return self._make_position(parent)
+
+
+def list_to_tree(values):
+    tree = LinkedBinaryTree()
+    if not values:
+        return tree
+
+    iter_values = iter(values)
+    root_value = next(iter_values)
+    if root_value is not None:
+        root = tree._add_root(root_value)
+        queue = LinkedQueue()
+        queue.enqueue(root)
+
+        while not queue.is_empty():
+            node = queue.dequeue()
+
+            try:
+                left_value = next(iter_values)
+                if left_value is not None:
+                    left_node = tree._add_left(node, left_value)
+                    queue.enqueue(left_node)
+            except StopIteration:
+                break
+
+            try:
+                right_value = next(iter_values)
+                if right_value is not None:
+                    right_node = tree._add_right(node, right_value)
+                    queue.enqueue(right_node)
+            except StopIteration:
+                break
+
+    return tree
+
+
+# Create a binary tree from a list of values
+tree = list_to_tree([1, 2, 3, 4, 5, 6, 7])
+
+# Test inorderNext
+print("Inorder Traversal:")
+for position in tree.inorder():
+    print(position.element(), end=" ")
+print("\n")
+
+# Test inorderNext method
+print("Inorder Next of each node:")
+positions = list(tree.inorder())
+for position in positions:
+    next_pos = tree.inorderNext(position)
+    if next_pos is not None:
+        print(f"Node {position.element()} -> {next_pos.element()}")
+    else:
+        print(f"Node {position.element()} -> None")
+
+print("\nPostorder Traversal:")
+for position in tree.postorder():
+    print(position.element(), end=" ")
+print("\n")
+
+# Test postorderNext method
+print("Postorder Next of each node:")
+positions = list(tree.postorder())
+for position in positions:
+    next_pos = tree.postorderNext(position)
+    if next_pos is not None:
+        print(f"Node {position.element()} -> {next_pos.element()}")
+    else:
+        print(f"Node {position.element()} -> None")
